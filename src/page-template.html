@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="O-PredSLS: Online System-Level Synthesis for Prediction-Adaptive Networked Control. Interactive voltage regulation and communication selection experiments.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; font-src 'self'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>O-PredSLS Experiments</title>
+<style>__DEMO_SHELL_CSS__</style>
+</head>
+<body class="research-site">
+<script>
+(() => {
+  const key = 'online-predsls-offline-v1';
+  let incompatibleWidgetState = false;
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(key));
+    incompatibleWidgetState = !saved && localStorage.getItem('online-sls-demo-v1') !== null;
+  } catch (_) {}
+  window.openai = {
+    widgetState: saved,
+    incompatibleWidgetState,
+    setWidgetState: async value => {
+      window.openai.widgetState = value;
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
+    }
+  };
+})();
+</script>
+__DEMO_HEADER__
+__DEMO_INTERFACE_HTML__
+__DEMO_FOOTER__
+<script src="assets/d3.v7.min.js"></script>
+<script>__DEMO_RESPONSES_JS__</script>
+<script>__DEMO_SIMULATION_JS__</script>
+<script>__DEMO_EQUIPMENT_JS__</script>
+<script>__DEMO_TOPOLOGY_JS__</script>
+<script>__DEMO_INTERFACE_JS__</script>
+</body>
+</html>

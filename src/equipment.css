@@ -1,0 +1,103 @@
+/* Artwork stays decorative. The enclosing bus handles hit area and badge input. */
+.pe-host { -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+.pe-hit { fill:transparent; pointer-events:all; }
+.pe-root { --pe-ink:#51606c; --pe-paper:#fff; --pe-voltage-color:#4c816b; --pe-voltage-opacity:.04; --pe-window-opacity:1; pointer-events:none; }
+.pe-root path,.pe-root rect,.pe-root circle { vector-effect:non-scaling-stroke; }
+.pe-attack-halo { fill:#ff9f0a; fill-opacity:0; stroke:#ef7b0b; stroke-opacity:0; stroke-width:1; transition:fill-opacity .18s,stroke-opacity .18s; }
+.pe-attacked .pe-attack-halo { fill-opacity:.14; stroke-opacity:.24; }
+.pe-attack-held .pe-attack-halo,.pe-attack-latched .pe-attack-halo { fill-opacity:.22; stroke-opacity:.8; stroke-width:2; transform-box:fill-box; transform-origin:center; animation:pe-continuous-halo 1.6s ease-in-out infinite; }
+.pe-voltage-wash { fill:var(--pe-voltage-color); opacity:var(--pe-voltage-opacity); transition:r .4s,opacity .4s,fill .4s; }
+.pe-disc { fill:var(--pe-paper); stroke:#dce6de; stroke-width:1; }
+.pe-voltage-ring { fill:none; stroke:var(--pe-voltage-color); stroke-opacity:.45; transition:stroke .4s,stroke-width .4s; }
+.pe-selected .pe-disc { fill:#edf5ff; stroke:#4389cc; }
+.pe-selected .pe-voltage-ring { stroke-opacity:.8; }
+.pe-glyph { stroke:var(--pe-ink); stroke-width:1.05; stroke-linejoin:round; stroke-linecap:round; fill:none; }
+.pe-house { fill:#f7f8fa; }
+.pe-house-back { fill:#eef1f5; stroke:#8c97a4; }
+.pe-roof { stroke-width:1.55; }
+.pe-roof-back { stroke:#819782; stroke-width:1.2; }
+.pe-door { fill:#cedecf; stroke-width:.65; }
+.pe-window { fill:#edbb65; stroke:#b99d61; stroke-width:.5; opacity:var(--pe-window-opacity); transition:opacity .4s; }
+.pe-root[data-equipment='Homes'].pe-pulse-active .pe-window { fill:#dd9650; animation:pe-window-flicker .75s ease-in-out 3; }
+.pe-chimney { fill:#f5f8f2; stroke-width:.9; }
+.pe-sun-disc { fill:#f0c465; stroke:#d5a449; stroke-width:.65; }
+.pe-sun-rays { stroke:#d5a449; stroke-width:.8; }
+.pe-sun { transition:opacity .45s; }
+.pe-cloud { fill:#d6e1e3; stroke:#91a6ae; stroke-width:.7; opacity:0; transform:translateX(-3px); transition:opacity .45s,transform .6s; }
+.pe-root[data-equipment='Solar'].pe-pulse-active .pe-cloud { opacity:1; transform:translateX(0); }
+.pe-root[data-equipment='Solar'].pe-pulse-active .pe-sun { opacity:.25; }
+.pe-panel-frame { fill:#729baa; stroke:#557a89; stroke-width:1.1; }
+.pe-panel-grid { stroke:#dae8e9; stroke-width:.65; }
+.pe-panel-stand { stroke:#688576; stroke-width:1.1; }
+.pe-battery-body { fill:#f3f7f2; }
+.pe-battery-terminal { fill:#789980; stroke:none; }
+.pe-effort-segment { fill:#4c8972; stroke:none; opacity:.15; transition:opacity .4s; }
+.pe-control-arrow { stroke:#4c8972; stroke-width:.9; transition:opacity .4s; }
+.pe-charging-surge { stroke:#c58948; stroke-width:1.9; stroke-linecap:round; opacity:0; transition:opacity .25s; }
+.pe-root[data-equipment='Battery'].pe-pulse-active .pe-charging-surge { opacity:1; }
+.pe-transformer { fill:#e1ebe3; }
+.pe-coil { stroke:#80a189; stroke-width:1.25; }
+.pe-insulator,.pe-station-wire { stroke:#5d7c6c; stroke-width:1; }
+.pe-station-base { fill:#edf2e9; stroke:#738d76; }
+.pe-target { opacity:0; transition:opacity .14s; }
+.pe-target-brackets { stroke:#df740d; stroke-width:1.5; fill:none; stroke-linecap:round; }
+.pe-target-bolt { fill:#ef7b0b; stroke:#fff; stroke-width:1.3; }
+.pe-host:hover .pe-target,.pe-host:focus-visible .pe-target { opacity:1; }
+.pe-host:hover .pe-disc,.pe-host:focus-visible .pe-disc { stroke:#c18a51; stroke-width:1.6; }
+.pe-host[aria-disabled='true'] .pe-target { opacity:0; }
+.pe-attacked .pe-disc { fill:#fff7ed; stroke:#ee850f; stroke-width:1.5; }
+.pe-attacked .pe-voltage-ring { stroke:#e97a0d; stroke-opacity:.95; }
+.pe-attacked .pe-target-bolt { opacity:0; }
+.pe-attack-badge { filter:drop-shadow(0 1px 2px #8b440426); }
+.pe-attack-badge rect { fill:#ec7609; stroke:#fff; stroke-width:1.5; }
+.pe-attack-bolt { fill:#fff; stroke:none; }
+.pe-attack-badge text { fill:#fff!important; font:650 10px var(--font-ui,-apple-system,BlinkMacSystemFont,sans-serif)!important; letter-spacing:0; }
+.pe-attack-badge .pe-attack-status { font-size:8px!important; font-weight:650!important; letter-spacing:.6px; fill:#fff2dd!important; }
+.pe-pulse-queued .pe-attack-badge rect { fill:#f38a0b; }
+.pe-attack-held .pe-attack-badge rect,.pe-attack-latched .pe-attack-badge rect { fill:#d95e00; stroke-width:2; }
+.pe-burst { pointer-events:none; }
+.pe-burst-ring { fill:#ff9f0a; fill-opacity:.1; stroke:#ed7d0d; stroke-width:2; transform-box:fill-box; transform-origin:center; animation:pe-ring 1.1s ease-out both; }
+.pe-burst-rays { fill:none; stroke:#f7981c; stroke-width:2; stroke-linecap:round; animation:pe-rays .75s ease-out both; }
+.pe-burst-bolt { fill:#ee7d09; stroke:#fff; stroke-width:1.8; stroke-linejoin:round; animation:pe-bolt .75s ease-out both; }
+@keyframes pe-continuous-halo { 0%,100% { transform:scale(.95); fill-opacity:.13; stroke-opacity:.5; } 50% { transform:scale(1.16); fill-opacity:.24; stroke-opacity:.95; } }
+@keyframes pe-ring { from { transform:scale(1); opacity:.95; } to { transform:scale(2.1); opacity:0; } }
+@keyframes pe-rays { 0% { opacity:0; } 15% { opacity:.95; } 100% { opacity:0; } }
+@keyframes pe-bolt { 0% { opacity:0; transform:translateY(-5px); } 15%,45% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(2px); } }
+@keyframes pe-window-flicker { 0%,100% { opacity:var(--pe-window-opacity); } 30% { opacity:.25; } 65% { opacity:.9; } }
+@media(prefers-reduced-motion:reduce) {
+  .pe-root * { animation:none!important; transition:none!important; }
+  .pe-burst { display:none; }
+}
+
+.pe-host[data-bus='1']:hover .pe-disc { stroke:#dce6de; stroke-width:1; }
+
+/* Residual power stays visible after request generation stops. */
+.pe-residual .pe-attack-badge rect { fill:#fff0dc; stroke:#dfb17a; stroke-width:1; }
+.pe-residual .pe-attack-badge text,.pe-residual .pe-attack-badge .pe-attack-status { fill:#895019!important; }
+.pe-residual .pe-attack-bolt { fill:#a75c17; }
+.pe-residual .pe-attack-halo { fill-opacity:.07; stroke-opacity:.25; }
+.pe-paused * { animation-play-state:paused!important; }
+.pe-paused .pe-burst { display:none; }
+
+.pe-attack-badge { pointer-events:all; cursor:pointer; }
+
+
+/* Forecast faults describe information quality, independently of power pulses. */
+.pr-forecast-badge circle { fill:#fff0d5; stroke:#b77b21; stroke-width:1; }
+.pr-forecast-badge path { fill:none; stroke:#a76a16; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
+.pr-forecast-signal { display:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round; }
+#power-response-demo[data-interaction='forecast'] .btn-attack .pr-attack-bolt,
+#power-response-demo[data-interaction='forecast'] .btn-attack .pr-attack-stop,
+#power-response-demo[data-interaction='forecast'] .pe-target-bolt { display:none; }
+#power-response-demo[data-interaction='forecast'] .btn-attack .pr-forecast-signal { display:block; fill:none; }
+#power-response-demo[data-interaction='forecast'] .btn-attack[data-attack-state='noisy'] { background:#fff0d5; color:#905b14; }
+#pr-intervention { background:#f4f4f6; color:var(--foreground); }
+@media(max-width:650px) {
+  #pr-intervention { grid-column:1 / -1; }
+  #power-response-demo[data-interaction='forecast'] .pr-actions { grid-template-columns:minmax(0,1fr) minmax(0,1.35fr); }
+  #power-response-demo[data-interaction='forecast'] #pr-intervention,
+  #power-response-demo[data-interaction='forecast'] .btn-attack { grid-column:auto; }
+}
+@media(max-width:650px),(pointer:coarse) {
+  #pr-intervention, #pr-pulse { min-height:44px; }
+}

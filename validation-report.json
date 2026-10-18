@@ -1,0 +1,1198 @@
+{
+  "kind": "offline demo transplanted-algorithm verification",
+  "createdUtc": "2026-10-18T13:19:50.409Z",
+  "status": "passed",
+  "scope": "Existing demo physical model, static K, synthesis objective, terminal cost and actuator limits retained. Not a reproduction of the original vendor trajectory.",
+  "protocol": {
+    "networks": [
+      "toy8",
+      "feeder24",
+      "feeder47"
+    ],
+    "beta": [
+      0,
+      1,
+      4
+    ],
+    "seeds": [
+      17,
+      29
+    ],
+    "discoveryActions": 40,
+    "deploymentActions": 35,
+    "horizon": 80,
+    "warmup": 30,
+    "selection": "exact descending raw actual-L squared energy; source-index tie break; mandatory local input",
+    "performanceSelection": "All cases reported; correctness does not require online or sparse cost superiority."
+  },
+  "checks": {
+    "remote_link_count": 1,
+    "mandatory_local": 2,
+    "per_receiver_budget": 2,
+    "raw_score_first": 1,
+    "raw_score_repeat": 1,
+    "empty_identity": 1,
+    "empty_scalar": 1,
+    "warmup_constant": 36,
+    "exact_regularization": 36,
+    "actual_rows_exposed": 2700,
+    "action_time": 2700,
+    "forecast_index_available": 77760,
+    "response_window": 77760,
+    "actual_L_is_U_minus_KX": 77760,
+    "executed_command_from_actual_L": 10800,
+    "executed_stage_cost": 10800,
+    "executed_terminal_cost": 10800,
+    "finite_states_and_cost": 10800,
+    "initial_or_frozen_matrix": 2250,
+    "initial_or_frozen_scalar": 2250,
+    "initial_or_frozen_update_count": 2250,
+    "discovery_actual_L_raw_sum": 720,
+    "discovery_static_L_raw_sum": 720,
+    "score_count_once_per_action": 720,
+    "fit_uses_only_completed_pairs": 450,
+    "scalar_uses_same_completed_pairs": 450,
+    "trained_through_previous_action": 450,
+    "history_window_count": 450,
+    "update_count": 450,
+    "display_score_is_raw_sum": 180,
+    "deployment_available": 36,
+    "fresh_deployment_time": 36,
+    "fresh_physical_state": 144,
+    "fresh_deployment_seed": 36,
+    "fresh_forecasts": 36,
+    "local_link_preserved": 324,
+    "budget_fixed": 324,
+    "every_local_gain_nonzero": 36,
+    "sparse_QP_actual_L_zeros": 18,
+    "discovery_score_frozen": 18,
+    "support_frozen": 630,
+    "communication_diagnostics_frozen": 630,
+    "synthesized_design_frozen": 1890,
+    "cumulative_is_executed_sum": 5040,
+    "total_includes_terminal": 5040,
+    "prediction_deployment_keeps_dense_design": 54,
+    "unrevealed_disturbance_not_fitted": 3,
+    "pulse_forecast_immutable": 3,
+    "newly_completed_disturbance_used": 3
+  },
+  "units": [
+    {
+      "id": "source-index exact ordering and mandatory local",
+      "status": "passed",
+      "support": [
+        [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true
+        ]
+      ]
+    },
+    {
+      "id": "scores are raw squared deployed L, not average or normalized",
+      "status": "passed",
+      "scores": [
+        [
+          10,
+          18
+        ],
+        [
+          32,
+          10
+        ]
+      ]
+    },
+    {
+      "id": "invalid mean-ridge or unsupported mask inputs rejected",
+      "status": "passed"
+    }
+  ],
+  "cases": [
+    {
+      "id": "toy8_communication_beta0_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.002738031336545145,
+        "scalar": 0.002738031336545145,
+        "static": 0.002738031336545145,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.0015751110206861521,
+        "scalar": 0.0015751110206861521,
+        "static": 0.00150638741648684,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 1.0456214672581292,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta0_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0028146589960600906,
+        "scalar": 0.0028158032287446586,
+        "static": 0.0028155938334176282,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.0015392061841985618,
+        "scalar": 0.0015393787416841723,
+        "static": 0.0015393459837542691,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 0.9999091824988127,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "toy8_communication_beta0_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.00212286868079136,
+        "scalar": 0.00212286868079136,
+        "static": 0.00212286868079136,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.003123608447046368,
+        "scalar": 0.003123608447046368,
+        "static": 0.0029849053523306034,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 1.0464681717989703,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta0_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.002190105176430714,
+        "scalar": 0.002190664486175089,
+        "static": 0.0021905857291935776,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.0030288625487589474,
+        "scalar": 0.003029244352089117,
+        "static": 0.0030291551510759165,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 0.9999034046450658,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "toy8_communication_beta1_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0027840664524257817,
+        "scalar": 0.0027845079326531443,
+        "static": 0.0027845262725120406,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.0015960592470096496,
+        "scalar": 0.0016057307567189452,
+        "static": 0.0015407866142489637,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 1.0358729964613742,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta1_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0028146589960600906,
+        "scalar": 0.0028158032287446586,
+        "static": 0.0028155938334176282,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.0015392061841985618,
+        "scalar": 0.0015393787416841723,
+        "static": 0.0015393459837542691,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 0.9999091824988127,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "toy8_communication_beta1_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.002182188202458619,
+        "scalar": 0.0021828501414372396,
+        "static": 0.0021826166849449142,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.003129531021232425,
+        "scalar": 0.003142339580662351,
+        "static": 0.0030104504912321054,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 1.0395557177728516,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta1_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.002190105176430714,
+        "scalar": 0.002190664486175089,
+        "static": 0.0021905857291935776,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.0030288625487589474,
+        "scalar": 0.003029244352089117,
+        "static": 0.0030291551510759165,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 0.9999034046450658,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "toy8_communication_beta4_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0033761551004634115,
+        "scalar": 0.003426459102893964,
+        "static": 0.0034976436405529067,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.001546063249994684,
+        "scalar": 0.002090568376164697,
+        "static": 0.002125440711526748,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 0.727408316595251,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta4_seed17",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0028146589960600906,
+        "scalar": 0.0028158032287446586,
+        "static": 0.0028155938334176282,
+        "causal": 0.0031613867209680227
+      },
+      "deploymentTotalCost": {
+        "online": 0.0015392061841985618,
+        "scalar": 0.0015393787416841723,
+        "static": 0.0015393459837542691,
+        "causal": 0.0017274572385613583
+      },
+      "onlineRelativeToStatic": 0.9999091824988127,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "toy8_communication_beta4_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.0028902266173674554,
+        "scalar": 0.0029478169867575214,
+        "static": 0.002978983568231198,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.003059701497802565,
+        "scalar": 0.003644768630860445,
+        "static": 0.0035794438277060724,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 0.8547980203291554,
+      "maximumForbiddenGain": 8.326672684688674e-17,
+      "minimumLocalGainEnergy": 524.1028368795967,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "toy8_prediction_beta4_seed29",
+      "status": "passed",
+      "network": "toy8",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 2,
+      "discoveryTotalCost": {
+        "online": 0.002190105176430714,
+        "scalar": 0.002190664486175089,
+        "static": 0.0021905857291935776,
+        "causal": 0.002452487142292611
+      },
+      "deploymentTotalCost": {
+        "online": 0.0030288625487589474,
+        "scalar": 0.003029244352089117,
+        "static": 0.0030291551510759165,
+        "causal": 0.0034399656517766306
+      },
+      "onlineRelativeToStatic": 0.9999034046450658,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta0_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.013295672190830719,
+        "scalar": 0.013295672190830716,
+        "static": 0.013295672190830716,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.016872052890384553,
+        "scalar": 0.016872052890384553,
+        "static": 0.014044010541458487,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 1.2013699961686564,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta0_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01477815186478781,
+        "scalar": 0.014792700863989221,
+        "static": 0.014790441680817354,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.015083062306415639,
+        "scalar": 0.01512647876826429,
+        "static": 0.015121936573159463,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 0.9974292798706202,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta0_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.015549507434283925,
+        "scalar": 0.015549507434283925,
+        "static": 0.015549507434283925,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.020249696959779247,
+        "scalar": 0.020198028322987026,
+        "static": 0.016637892827775055,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 1.217083026642334,
+      "maximumForbiddenGain": 2.220446049250313e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta0_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01682606706371069,
+        "scalar": 0.01689017253311301,
+        "static": 0.01688411075156636,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.018065794571024488,
+        "scalar": 0.018122070544604525,
+        "static": 0.018118099588135227,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 0.9971131068765627,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta1_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01431069556254801,
+        "scalar": 0.01431097272801678,
+        "static": 0.014369241060202098,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.017142767692502857,
+        "scalar": 0.01739633689520675,
+        "static": 0.014965621978289781,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 1.145476460475308,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta1_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01477815186478781,
+        "scalar": 0.014792700863989221,
+        "static": 0.014790441680817354,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.015083062306415639,
+        "scalar": 0.01512647876826429,
+        "static": 0.015121936573159463,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 0.9974292798706202,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta1_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01692058091340467,
+        "scalar": 0.016951507812287894,
+        "static": 0.01697335515619875,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.02026698902430462,
+        "scalar": 0.02056647841868519,
+        "static": 0.017545275648586087,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 1.1551251419602442,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta1_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01682606706371069,
+        "scalar": 0.01689017253311301,
+        "static": 0.01688411075156636,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.018065794571024488,
+        "scalar": 0.018122070544604525,
+        "static": 0.018118099588135227,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 0.9971131068765627,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta4_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.02588748282151018,
+        "scalar": 0.025889414084436933,
+        "static": 0.029629771284118665,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.01747576564646588,
+        "scalar": 0.02445840098029601,
+        "static": 0.02686530291061958,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 0.6504957604463819,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta4_seed17",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01477815186478781,
+        "scalar": 0.014792700863989221,
+        "static": 0.014790441680817354,
+        "causal": 0.017515068570083187
+      },
+      "deploymentTotalCost": {
+        "online": 0.015083062306415639,
+        "scalar": 0.01512647876826429,
+        "static": 0.015121936573159463,
+        "causal": 0.018180775958378827
+      },
+      "onlineRelativeToStatic": 0.9974292798706202,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder24_communication_beta4_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03227844021614866,
+        "scalar": 0.03311631337383683,
+        "static": 0.03700133997166645,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.01988986976808171,
+        "scalar": 0.026059285563299006,
+        "static": 0.030942061756972263,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 0.6428100985739863,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder24_prediction_beta4_seed29",
+      "status": "passed",
+      "network": "feeder24",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.01682606706371069,
+        "scalar": 0.01689017253311301,
+        "static": 0.01688411075156636,
+        "causal": 0.020120811997472985
+      },
+      "deploymentTotalCost": {
+        "online": 0.018065794571024488,
+        "scalar": 0.018122070544604525,
+        "static": 0.018118099588135227,
+        "causal": 0.021694292556906657
+      },
+      "onlineRelativeToStatic": 0.9971131068765627,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta0_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.029222574767221832,
+        "scalar": 0.029222574767221832,
+        "static": 0.029222574767221832,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.04564963882310155,
+        "scalar": 0.04564963882310155,
+        "static": 0.03742157342317555,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 1.219874918322656,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta0_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 0,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03191194299661811,
+        "scalar": 0.03210700873842032,
+        "static": 0.03209598895114267,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.04021088911503403,
+        "scalar": 0.040356307557366446,
+        "static": 0.040349502076057364,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 0.9965646921550096,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta0_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03421617262394402,
+        "scalar": 0.03421617262394402,
+        "static": 0.03421617262394402,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.04623283776303502,
+        "scalar": 0.04611305961309039,
+        "static": 0.03706591200240279,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 1.247314183448069,
+      "maximumForbiddenGain": 2.220446049250313e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta0_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 0,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.037279982864203955,
+        "scalar": 0.03751956095358232,
+        "static": 0.03750277726607181,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.040803148984263564,
+        "scalar": 0.04096415804100788,
+        "static": 0.040958039700533494,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 0.9962183073847669,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta1_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03155161730884547,
+        "scalar": 0.03164161156579114,
+        "static": 0.031705518897617115,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.04562027209245446,
+        "scalar": 0.04638210195105084,
+        "static": 0.04000957408574355,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 1.1402338848868212,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta1_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 1,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03191194299661811,
+        "scalar": 0.03210700873842032,
+        "static": 0.03209598895114267,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.04021088911503403,
+        "scalar": 0.040356307557366446,
+        "static": 0.040349502076057364,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 0.9965646921550096,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta1_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.036571204065006094,
+        "scalar": 0.03661858601607332,
+        "static": 0.03674155946923506,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.04637683922112712,
+        "scalar": 0.04699682475547648,
+        "static": 0.03921669236468843,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 1.1825790607186915,
+      "maximumForbiddenGain": 2.220446049250313e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta1_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 1,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.037279982864203955,
+        "scalar": 0.03751956095358232,
+        "static": 0.03750277726607181,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.040803148984263564,
+        "scalar": 0.04096415804100788,
+        "static": 0.040958039700533494,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 0.9962183073847669,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta4_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.0598023409051547,
+        "scalar": 0.06059302471055605,
+        "static": 0.06771155672165491,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.048629059034503125,
+        "scalar": 0.060602217097419864,
+        "static": 0.07106194602170339,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 0.6843192701147119,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta4_seed17",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 4,
+      "seed": 17,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435752,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.03191194299661811,
+        "scalar": 0.03210700873842032,
+        "static": 0.03209598895114267,
+        "causal": 0.03823328456166938
+      },
+      "deploymentTotalCost": {
+        "online": 0.04021088911503403,
+        "scalar": 0.040356307557366446,
+        "static": 0.040349502076057364,
+        "causal": 0.04895653315781905
+      },
+      "onlineRelativeToStatic": 0.9965646921550096,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    },
+    {
+      "id": "feeder47_communication_beta4_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "communication",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.06506731452715356,
+        "scalar": 0.06503468077572043,
+        "static": 0.0709332962889231,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.04559746704482475,
+        "scalar": 0.06208815226695127,
+        "static": 0.07018668874343363,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 0.6496597554488658,
+      "maximumForbiddenGain": 1.6653345369377348e-16,
+      "minimumLocalGainEnergy": 200.42480071932957,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": false
+    },
+    {
+      "id": "feeder47_prediction_beta4_seed29",
+      "status": "passed",
+      "network": "feeder47",
+      "beta": 4,
+      "seed": 29,
+      "experiment": "prediction",
+      "discoveryActions": 40,
+      "deploymentActions": 35,
+      "deploymentSeed": 2654435748,
+      "remoteBudget": 3,
+      "discoveryTotalCost": {
+        "online": 0.037279982864203955,
+        "scalar": 0.03751956095358232,
+        "static": 0.03750277726607181,
+        "causal": 0.04538250723513157
+      },
+      "deploymentTotalCost": {
+        "online": 0.040803148984263564,
+        "scalar": 0.04096415804100788,
+        "static": 0.040958039700533494,
+        "causal": 0.04936265617321342
+      },
+      "onlineRelativeToStatic": 0.9962183073847669,
+      "maximumForbiddenGain": null,
+      "minimumLocalGainEnergy": null,
+      "scoreSamples": 10,
+      "predictionDeploymentDense": true
+    }
+  ],
+  "causality": [
+    {
+      "id": "toy8_unannounced_pulse",
+      "status": "passed",
+      "eventAt": 35,
+      "newPairFirstUsedAt": 36
+    },
+    {
+      "id": "feeder24_unannounced_pulse",
+      "status": "passed",
+      "eventAt": 35,
+      "newPairFirstUsedAt": 36
+    },
+    {
+      "id": "feeder47_unannounced_pulse",
+      "status": "passed",
+      "eventAt": 35,
+      "newPairFirstUsedAt": 36
+    }
+  ],
+  "failures": [],
+  "sources": {
+    "src/online-predsls.js": "53c3b898049c28ccad4410e0d6a01d4f9a0efc927c28c539d72cc86b41443cfe",
+    "src/simulation.js": "b16e19dbf4db8b20471e934f4796770b7f659c4af68ebcf0ac0b23cff1c57d70",
+    "src/response-controller.js": "fa33f8b1b6dea3c4d8562ac4c5484c5cbc3c7e453e35f41769eddd1fc11a4a8b"
+  },
+  "summary": {
+    "unitCases": 3,
+    "integrationCases": 36,
+    "causalityCases": 3,
+    "assertions": 307602,
+    "failures": 0
+  }
+}

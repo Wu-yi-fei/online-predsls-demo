@@ -1,0 +1,21 @@
+# O-PredSLS
+
+*Online System-Level Synthesis for Prediction-Adaptive Networked Control*
+
+Yifei Wu, [Jing Yu](https://jingyu.io/), [Tongxin Li](https://tongxin.me/)
+
+O-PredSLS learns predictive closed-loop responses online to adapt to heterogeneous prediction errors. The interactive demo illustrates voltage regulation and communication selection from learned responses.
+
+**Paper** (forthcoming) | **PDF** (forthcoming) | [Demo](demo.html)
+
+[Project homepage](index.html)
+
+## Citation
+
+```bibtex
+@unpublished{wu_opredsls,
+  title  = {Online System-Level Synthesis for Prediction-Adaptive Networked Control},
+  author = {Wu, Yifei and Yu, Jing and Li, Tongxin},
+  note   = {Manuscript}
+}
+```

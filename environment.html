@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Experimental environment for the interactive LinDistFlow feeder demo.">
+<title>Experimental environment · O-PredSLS Demo</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1d1d1f;background:#fff;font-synthesis:none}*{box-sizing:border-box}body{margin:0;padding:40px 24px 60px}main{max-width:760px;margin:auto}nav{display:flex;justify-content:space-between;align-items:center;font-size:14px;border-bottom:1px solid #e5e5e7;padding-bottom:22px;margin-bottom:42px}a{color:#0066cc;text-decoration:none}a:hover{text-decoration:underline}nav span{color:#86868b}h1{font-size:36px;letter-spacing:-1.2px;line-height:1.1;font-weight:650;margin:0 0 16px}p{font-size:16px;line-height:1.6;margin:12px 0;color:#424245}h2{font-size:19px;letter-spacing:-.35px;margin:30px 0 10px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.45}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #e8e8ed;padding:9px 12px 9px 0}th{font-weight:600;width:35%}.network-scenarios th{width:auto}.network-scenarios{font-size:13px}.equation{font-size:16px;line-height:1.65;background:#f5f5f7;border-radius:12px;padding:14px 18px;margin:16px 0;font-variant-numeric:tabular-nums}footer{margin-top:34px;padding-top:18px;border-top:1px solid #e5e5e7;color:#86868b;font-size:13px;line-height:1.5}@media(max-width:520px){body{padding:24px 20px}h1{font-size:30px}nav{margin-bottom:30px}th{width:40%}.equation{font-size:14px;overflow-x:auto}}@media print{body{padding:0}nav{margin-bottom:20px}h1{font-size:28px}h2{margin-top:20px}p{font-size:11pt}table,footer{font-size:10pt}.equation{font-size:11pt}a{color:inherit}main{max-width:none}}
+</style>
+</head>
+<body><main>
+<nav><a href="demo.html">← Return to the experiment</a><span>Offline edition</span></nav>
+<h1>Predictive control on a feeder</h1>
+<p>This edition transfers the original Python experiment's windowed ridge update, predictive-response update and communication score to the existing interactive feeder. It retains the demo's physical network, inverter dynamics, fixed feedback, actuator limits and offline synthesis objective. It is not a trajectory-level reproduction of the paper's fully actuated voltage experiment.</p>
+<h2>Physical setting</h2>
+<table aria-label="Network dimensions"><thead><tr><th>Network</th><th>States</th><th>Inverters</th><th>Remote links<br>Sparse / dense</th></tr></thead><tbody>
+<tr><td>Toy · 8 buses</td><td>7</td><td>3</td><td>6 / 18</td></tr>
+<tr><td>Feeder · 24 buses</td><td>23</td><td>8</td><td>24 / 176</td></tr>
+<tr><td>Larger · 47 buses</td><td>46</td><td>16</td><td>48 / 720</td></tr>
+</tbody></table>
+<p>Bus 1 is fixed at 1 pu. Voltage follows the original LinDistFlow sensitivities on 12.47 kV and 1 MVA bases. Each inverter has a two-second response time, a 120 kVA rating and a reactive command bound of ±70 kvar. Samples are one second apart. The larger network consists of two reference branches sharing the slack. Absolute costs sum over the network and are not directly comparable across sizes.</p>
+<h2>Prediction and online update</h2>
+<p>The default demand and solar cycle and correlated background retain their original generators. Forecasts estimate voltage forcing. The five-sample preview includes the current action; a target-t forecast is sealed at max(0, t − 4) and revealed at state t + 1. Later changes to source reliability cannot rewrite an issued message. Manual power disturbances remain unforecast.</p>
+<p>Online SLS and scalar adaptation use the same mean loss, the same revealed data and the same regularization. With f denoting a forecast and y its observed forcing, the update is</p>
+<div class="equation">Cₜ = arg min<sub>C</sub> (1/m) Σ<sub>q ∈ Wₜ</sub> ‖y<sub>q</sub> − Cf<sub>q</sub>‖² + λ‖C − I‖<sub>F</sub>²<br>λ = 1.2725674932370515 × 10<sup>−5</sup> · m ≤ 60 · first update: action 30</div>
+<p>Online SLS uses a full matrix; scalar adaptation restricts C = cI in this same objective. The scalar regularizer is therefore nλ(c − 1)², where n is the number of nonslack states. Before the first update, C = I. Source-quality labels are excluded from the fit.</p>
+<div class="equation">Φ̂<sup>x</sup><sub>t,k</sub> = Φ̂<sup>x,off</sup><sub>t,k</sub>Cₜ &nbsp; · &nbsp; Φ̂<sup>u</sup><sub>t,k</sub> = Φ̂<sup>u,off</sup><sub>t,k</sub>Cₜ<br>L<sub>t,k</sub> = Φ̂<sup>u</sup><sub>t,k</sub> − KΦ̂<sup>x</sup><sub>t,k</sub></div>
+<p>The command breakdown uses the actual row L executed at that action. It sums the inspected raw source, other prediction messages and feedback before the actuator limit. The online fit adds no affine projection or support-compatible correction mask. The separate completed-row delayed-gradient diagnostic in the source does not drive this controller.</p>
+<h2>Two experiments</h2>
+<p><strong>Communication topology:</strong> discovery uses dense messages and accumulates S<sub>ij</sub> = Σ<sub>t,k</sub>|L<sub>t,k,ij</sub>|², without time averaging. The highest-scoring remote sources are retained under the fixed per-receiver budget; local sources are mandatory. Learned and fixed supports each receive a new solve of the existing offline quadratic program. An independent comparison then uses fixed Learned sparse, Fixed sparse, Dense prediction and Feedback only controllers.</p>
+<p><strong>Prediction adaptation:</strong> Online SLS and scalar adaptation retain dense messages, alongside fixed prediction and feedback only. Discovery candidates are diagnostic; the comparison matrix displays all actually permitted prediction sources. The fresh comparison resets state, accumulated cost, correction and training history. Adaptation restarts at action 30 using only observations from that new trial.</p>
+<p>Offline synthesis retains the demo's finite response support, initial conditions and terminal Riccati cost. It is not replaced by the paper's fully actuated model. All controllers share physical disturbances, raw forecasts, feedback, objective and equipment limits. The stated regularization is transferred without tuning for display performance. No controller is guaranteed to win under every error pattern or attack.</p>
+<h2>Costs and evidence</h2>
+<div class="equation">cₜ = 35‖vₜ − v̄‖² + 0.08‖uₜ‖²</div>
+<p>Commands in the objective are in per unit on the 1 MVA base; the interface reports kvar. Live curves sum actual stage costs. Finite-horizon validation also reports the terminal Riccati penalty. Voltage and cost are not clipped; inverter saturation remains part of the executed dynamics. The 0.95–1.05 pu band is illustrative, not an enforced state constraint.</p>
+<p>The <a href="validation-report.json">current local validation report</a> identifies checked equations, experimental conditions and source fingerprints. Upstream benchmark files belong to the previous algorithm and are not current performance evidence. The old numerical overview has therefore been removed. The <a href="README.md">Chinese README</a> records the adaptation and reproduction scope.</p>
+<p>Current saves use schema 14 and algorithm identifier <code>opredsls-window-ridge-v1</code>. Older saves remain under their previous storage key and are not replayed by the new algorithm. Viewing history, changing chart visibility or changing playback speed does not alter recorded physical samples.</p>
+<footer>This is a constructed, balanced feeder. LinDistFlow omits line losses and the demo does not model protection, frequency, thermal line limits or battery energy limits. The page runs locally without external scripts or data.</footer>
+</main></body></html>

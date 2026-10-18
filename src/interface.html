@@ -1,0 +1,145 @@
+<div id="power-response-demo">
+  <div class="pr-experiment-front" aria-label="Experiment selection">
+    <label class="pr-experiment-choice" for="pr-experiment">Experiment <select id="pr-experiment" aria-label="Experiment"><option value="communication" selected>Communication topology</option><option value="prediction">Prediction adaptation</option></select></label>
+    <label class="pr-network-picker" for="pr-network-scenario"><span>Network</span><select id="pr-network-scenario" aria-label="Network scenario" title="Changing network starts a fresh trial"><option value="toy8">Toy · 8 buses</option><option value="feeder24" selected>Feeder · 24 buses</option><option value="feeder47">Larger · 47 buses</option></select></label>
+  </div>
+  <details class="pr-adaptation" id="pr-adaptation">
+    <summary>Experiment settings <span aria-hidden="true">+</span></summary>
+    <div class="pr-settings-group" aria-label="Playback and views">
+      <label class="pr-setting-control" for="pr-speed">Speed <select id="pr-speed" aria-label="Playback speed" title="16× plays sixteen simulation samples per second"><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option><option value="16" selected>16×</option><option value="32">32×</option></select></label>
+      <button type="button" class="btn btn-quiet" id="pr-step" title="Advance one second of feeder operation">Step 1 s</button>
+      <label class="pr-setting-control" for="pr-view">Controller panel <select id="pr-view" aria-label="Controller view"><option value="cost">Cost comparison</option><option value="learning" selected>Learning progress</option></select></label>
+    </div>
+    <div class="pr-settings-group pr-attack-settings" aria-label="Power attack settings">
+      <label class="pr-setting-control" for="pr-attack-mode">Power attack <select id="pr-attack-mode" aria-label="Attack mode"><option value="continuous" selected>Continuous</option><option value="pulse">Pulse</option></select></label>
+      <label class="pr-setting-control" for="pr-strength">Per pulse <select id="pr-strength" aria-label="Pulse strength" title="Requested power per pulse. Applied power respects equipment limits"><option value="50">50 kW</option><option value="100" selected>100 kW</option><option value="150">150 kW</option></select></label>
+    </div>
+  <div class="pr-experiment-bar" aria-label="Forecast settings">
+    <label class="pr-noise-control" id="pr-noise-control" for="pr-noise">Noise scale β <select id="pr-noise" aria-label="Forecast noise level" title="Dimensionless multiplier of additive forecast-noise SD. Changing it starts a fresh trial."><option value="0">0</option><option value="0.25">0.25</option><option value="0.5">0.5</option><option value="1">1</option><option value="2">2</option><option value="4" selected>4</option><option value="8">8</option><option value="16">16</option></select></label>
+    <span id="pr-noise-caption" class="pr-caption">Selected source forecast error in mpu</span>
+  </div>
+    <div class="pr-comparison-controls">
+      <label for="pr-power-scenario">Power scenario <select id="pr-power-scenario" aria-label="Power scenario" title="Changing the scenario starts a fresh discovery trial"><option value="forecasted-demand" selected>Forecasted demand</option><option value="reference">Reference</option><option value="solar-outage">Solar outage · 20 s</option></select></label>
+      <label id="pr-preset-control" for="pr-preset">Error model <select id="pr-preset" aria-label="Forecast preset" title="Changing forecasts starts a new discovery trial"><option value="reliable">Low noise</option><option value="uniform">Uniform bias + noise</option><option value="mixed" selected>Mixed bias + noise</option></select></label>
+      <button type="button" class="btn btn-compare" id="pr-compare" title="Advance 180 samples across discovery and comparison">Advance 180</button>
+    </div>
+    <div class="pr-settings"><label class="form-check"><input type="checkbox" id="pr-auto-compare" checked>Start comparison automatically</label><label>Bus <select id="pr-bus" aria-label="Selected bus"></select></label><button type="button" class="btn" id="pr-fault">Repair forecast</button><label class="form-check"><input type="checkbox" id="pr-all-links" checked>All prediction links</label></div>
+    <div class="pr-settings-group pr-session-settings"><button type="button" id="pr-deploy" class="btn btn-deploy" disabled title="Start four controllers on the same fresh disturbance sequence">Rebuild prediction links</button><button type="button" class="btn btn-quiet" id="pr-new-scenario" hidden>Restore default scenario</button></div>
+    <p id="pr-phase-note" class="pr-overlap-note">Physical attacks test disturbance recovery · Forecast settings test prediction adaptation</p>
+    <p class="pr-caption" id="pr-fit-detail"></p>
+  </details>
+  <div class="pr-scenario-heading">
+    <div><strong id="pr-scenario-name">Forecasted demand</strong><p id="pr-scenario-description" class="pr-caption">Forecast settings · β 4 · 8 quiet / 15 noisy</p></div>
+  </div>
+  <div class="pr-controlbar" aria-label="Simulation controls">
+    <div class="pr-toolbar">
+      <button type="button" class="btn btn-play" id="pr-run">Run</button>
+      <button type="button" class="btn btn-quiet" id="pr-restart" title="Restart learning and comparison">Restart demo</button>
+      <span id="pr-phase" class="pr-phase-badge">Learning</span>
+      <span id="pr-clock" class="tabular-nums">0 s</span>
+    </div>
+    <div class="pr-actions">
+      <select id="pr-intervention" aria-label="Bus interaction" title="Choose what clicking a bus changes"><option value="forecast" selected>Forecast</option><option value="power">Unforecast power stress</option></select>
+      <button type="button" class="btn btn-attack" id="pr-pulse" aria-keyshortcuts="D" title="Click for a pulse or hold for one pulse each sample"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path class="pr-forecast-signal" d="M3 12h3l3-7 6 14 3-7h3"/><path class="pr-attack-bolt" d="M14 2 5 14h6l-1 8 9-13h-6z"/><rect class="pr-attack-stop" x="6" y="6" width="12" height="12" rx="2"/></svg><span id="pr-pulse-label">Attack bus 7</span></button>
+      <button type="button" class="btn btn-stop-attacks" id="pr-stop-attacks" title="Stop requests at every bus. Existing disturbances then decay" hidden>Stop all <span id="pr-attack-count" class="pr-attack-count tabular-nums" aria-live="polite"></span></button>
+      <span id="pr-attack-hint" class="pr-attack-hint">Click to start or stop</span>
+    </div>
+  </div>
+  <section id="pr-experiment-progress" class="pr-experiment-progress" aria-label="Experiment stages">
+    <ol class="pr-progress-steps">
+      <li id="pr-progress-learning" data-status="active" aria-current="step"><span class="pr-step-number" aria-hidden="true">1</span><div><strong>Learn prediction links</strong><span id="pr-progress-learning-count" class="tabular-nums">0 / 180 samples</span></div><span class="pr-progress-track" aria-hidden="true"><span id="pr-progress-learning-fill"></span></span></li>
+      <li id="pr-progress-comparison" data-status="pending"><span class="pr-step-number" aria-hidden="true">2</span><div><strong>Compare four controllers</strong><span id="pr-progress-comparison-count" class="tabular-nums">Next</span></div><span class="pr-progress-track" aria-hidden="true"><span id="pr-progress-comparison-fill"></span></span></li>
+    </ol>
+    <p id="pr-transition-note" class="pr-sr-only" role="status">Learn, then compare on a fresh trial.</p>
+  </section>
+  <div class="pr-mission">
+    <span class="pr-mission-goal"><span class="pr-status-dot" id="pr-voltage-status" aria-hidden="true"></span><strong>Voltage range</strong></span>
+    <span id="pr-voltage-range" class="tabular-nums"></span>
+  </div>
+  <p id="pr-scenario-status" class="pr-caption" role="status" hidden></p>
+  <div id="pr-controller-key" class="pr-legend pr-controller-key" role="group" aria-label="Controller curves"><button type="button" data-series="online" aria-pressed="true"><span class="pr-swatch online"></span>Online SLS</button><button type="button" data-series="scalar" aria-pressed="true"><span class="pr-swatch scalar"></span>Scalar adaptation</button><button type="button" data-series="static" aria-pressed="true"><span class="pr-swatch static"></span>Fixed prediction</button><button type="button" data-series="causal" aria-pressed="true"><span class="pr-swatch causal"></span>Feedback only</button></div>
+  <div class="pr-dashboard">
+    <section class="pr-panel pr-network-panel" aria-labelledby="pr-network-title">
+      <div class="pr-subhead"><h2 id="pr-network-title">Power network</h2><span id="pr-action-note" class="pr-caption" aria-live="polite">Click a bus to start · Click again to stop</span></div>
+      <p id="pr-scheduled-power" class="pr-caption pr-scheduled-power" hidden></p>
+      <p id="pr-network-scroll-hint" class="pr-scroll-hint" hidden>Scroll to explore all buses →</p><div class="pr-network-scroll" role="region"><svg class="pr-chart" id="pr-network" role="group" aria-label="24 bus radial power feeder. Click a load, solar, or battery bus to start a continuous disturbance. Click again to stop."></svg></div>
+      <p id="pr-network-inspection" class="pr-network-inspection" hidden><span id="pr-network-inspection-source" class="pr-inspection-source"></span><span id="pr-network-inspection-join" aria-hidden="true"></span><span id="pr-network-inspection-receiver" class="pr-inspection-receiver"></span><span id="pr-network-inspection-status"></span></p>
+      <div class="pr-panel-foot"><span id="pr-bus-detail" class="tabular-nums"></span><span class="pr-live-stage">Cost <strong id="pr-live-cost" class="tabular-nums">0.0000</strong></span></div>
+    </section>
+    <section class="pr-panel pr-matrix-panel" aria-labelledby="pr-matrix-title">
+      <div class="pr-subhead"><h2 id="pr-matrix-title">Prediction links</h2><select id="pr-matrix-view" aria-label="Prediction matrix view"><option value="links" selected>Sparsity</option><option value="change">Weight change</option></select></div>
+      <p id="pr-link-budget" class="pr-caption pr-link-budget"></p><p id="pr-noisy-links" class="pr-caption pr-noisy-links" hidden></p><div class="pr-matrix-key" id="pr-matrix-key"></div><p id="pr-matrix-scroll-hint" class="pr-scroll-hint" hidden>Scroll to explore all sources →</p><div class="pr-matrix-scroll" role="region" aria-describedby="pr-matrix-scroll-hint"><svg class="pr-chart" id="pr-matrix" role="group" aria-label="Candidate prediction links. Rows receive forecasts from columns"></svg></div>
+      <p id="pr-matrix-inspect-hint" class="pr-caption">Select a link to inspect its source</p>
+      <div id="pr-source-controls" class="pr-source-controls" hidden><button type="button" id="pr-source-fault" class="btn btn-quiet" aria-describedby="pr-source-status" disabled>Corrupt source</button><span id="pr-source-status" class="pr-caption" role="status"></span></div>
+      <div id="pr-forecast-observation" class="pr-forecast-observation" hidden>
+        <p id="pr-forecast-timing" class="pr-caption"></p>
+        <dl id="pr-forecast-values" class="pr-forecast-values" aria-label="Raw source voltage forcing in mpu" aria-describedby="pr-forecast-units" hidden>
+          <div><dt>Forecast ŵ</dt><dd id="pr-observed-forecast">—</dd></div>
+          <div><dt>Observed w</dt><dd id="pr-observed-realized">—</dd></div>
+          <div><dt>Error ŵ − w</dt><dd id="pr-observed-error">—</dd></div>
+        </dl>
+        <p id="pr-forecast-units" class="pr-caption" title="Disturbance forcing, in per-unit voltage coordinates. Observed forecast error also includes unforecast power changes.">Forcing in mpu · 1 mpu = 0.001 pu</p>
+        <p id="pr-forecast-window" class="pr-caption"></p>
+        <p id="pr-forecast-change" class="pr-caption"></p>
+        <p id="pr-forecast-support" class="pr-caption"></p>
+        <section id="pr-link-receipt" class="pr-link-receipt" aria-labelledby="pr-link-receipt-title" hidden>
+          <h3 id="pr-link-receipt-title">Selection and synthesis</h3>
+          <p id="pr-link-receipt-time" class="pr-caption"></p>
+          <table aria-label="Measured selection and resynthesized controller comparison" aria-describedby="pr-link-receipt-note">
+            <thead><tr><th scope="col">Measured link</th><th id="pr-link-receipt-scalar" scope="col">Fixed sparse</th><th id="pr-link-receipt-online" scope="col">Learned sparse</th></tr></thead>
+            <tbody id="pr-link-receipt-rows" aria-label="Frozen discovery evidence"></tbody>
+            <tbody id="pr-link-receipt-execution" aria-label="Executed controller evidence">
+              <tr id="pr-link-receipt-execution-time"><th id="pr-link-receipt-action" scope="rowgroup" colspan="3"></th></tr>
+            </tbody>
+          </table>
+          <p id="pr-link-receipt-note" class="pr-caption" title="Scores sum squared message gains from executed discovery rows. Gain norm uses the resynthesized response. Source contribution is before saturation; command includes all messages and feedback.">Score = Σ|Lᵢⱼ|² · Command includes feedback and limiting</p>
+        </section>
+        <details id="pr-command-inspector" class="pr-command-inspector" hidden>
+          <summary id="pr-command-title">Command breakdown</summary>
+          <p class="pr-caption" title="Source and other contributions use all forecasts available to the executed command, before saturation.">kvar · Full preview · Before limiting<span id="pr-command-scroll-hint" hidden></span></p>
+          <div id="pr-command-scroll" class="pr-command-scroll" tabindex="0" role="region" aria-label="Receiver command table" aria-describedby="pr-command-gain-note pr-command-scroll-hint" data-command-scroll><table aria-label="Latest receiver command decomposition in kvar" aria-describedby="pr-command-gain-note">
+            <thead><tr><th>Controller</th><th>Source</th><th>Other</th><th>Feedback</th><th>Request</th><th>Command</th><th id="pr-command-gain-heading" scope="col">Gain norm</th></tr></thead>
+            <tbody id="pr-command-rows"></tbody>
+          </table></div>
+          <p id="pr-command-gain-note" class="pr-caption" title="Source message-gain norm across the issued preview, in pu command per pu forcing.">Request = Source + Other + Feedback · Command ∈ [−70, 70] kvar</p>
+        </details>
+      </div>
+      <div class="pr-panel-foot pr-matrix-detail"><span id="pr-matrix-detail">Rows receive from columns</span><span id="pr-matrix-changes" class="tabular-nums">0 added · 0 removed</span></div><details id="pr-link-history-details" class="pr-panel-details"><summary>Link history</summary><div class="pr-topology-status"><strong id="pr-topology-status">Connectivity unchanged</strong><span id="pr-topology-gain">Weights changed 0%</span></div><div id="pr-topology-events" class="pr-topology-events" aria-label="Recent topology changes" hidden></div><div class="pr-topology-history"><label for="pr-topology-history" id="pr-history-count">0 link updates</label><input id="pr-topology-history" type="range" min="0" max="0" step="1" value="0" aria-label="Topology history" disabled><button type="button" id="pr-history-live" aria-pressed="true">Latest</button></div><p id="pr-topology-note" class="pr-caption" aria-live="polite"></p></details>
+    </section>
+    <section class="pr-panel pr-stage-panel" aria-labelledby="pr-stage-title">
+      <div class="pr-subhead"><h2 id="pr-stage-title">Voltage and cost</h2><strong id="pr-state-value" class="pr-state-value tabular-nums">1.000 pu</strong></div>
+      <div class="pr-plot-label"><span id="pr-voltage-detail">Bus 7 voltage</span><span id="pr-voltage-reference" class="pr-target-key">Nominal voltage</span></div>
+      <svg class="pr-chart" id="pr-voltage" role="img" aria-label="Selected bus voltage in per unit with its nominal reference profile"></svg>
+      <div class="pr-plot-label pr-stage-label"><span>Normalized cost per second</span><span id="pr-pulse-summary" class="tabular-nums" aria-live="polite"></span></div>
+      <svg class="pr-chart" id="pr-stage" role="img" aria-label="Normalized voltage and reactive effort cost under identical power disturbances"></svg>
+      <div id="pr-stage-detail" class="pr-panel-foot tabular-nums"></div>
+      <details id="pr-voltage-details" class="pr-panel-details"><summary>Voltage details</summary>
+        <table class="pr-cost-table pr-voltage-table tabular-nums" aria-label="Voltage deviation from nominal profile" aria-describedby="pr-voltage-metrics-note"><thead><tr><th scope="col">Method</th><th scope="col">Now</th><th scope="col">Peak</th><th scope="col" title="Inverters with clipped reactive commands at the last action">Limited</th></tr></thead><tbody id="pr-voltage-metrics"></tbody></table>
+        <p id="pr-voltage-metrics-note" class="pr-caption">Worst bus deviation · 1 mpu = 0.001 pu · Peak resets for comparison</p>
+      </details>
+    </section>
+    <section class="pr-panel pr-learning-panel" aria-labelledby="pr-learning-title">
+      <div class="pr-subhead"><h2 id="pr-learning-title">Experiment results</h2><span id="pr-results-stage" class="pr-caption">Learning progress</span></div>
+      <p id="pr-trial-context" class="pr-trial-context" hidden></p>
+      <div id="pr-learning-content" hidden>
+        <div class="pr-algorithm-flow" id="pr-learning-flow" aria-label="Online predictive-response adaptation cycle">
+          <div><span class="pr-flow-index">01</span><strong>Forecast</strong><span id="pr-flow-predict">Voltage forcing</span></div>
+          <div><span class="pr-flow-index">02</span><strong>Control</strong><span id="pr-flow-control">Reactive support</span></div>
+          <div><span class="pr-flow-index">03</span><strong>Observe</strong><span id="pr-flow-observe">Measured disturbance</span></div>
+          <div><span class="pr-flow-index">04</span><strong>Learn</strong><span id="pr-flow-update">Revealed samples</span></div>
+        </div>
+        <div class="pr-learning-caption"><span id="pr-learning-kind">Raw dashed · Online SLS solid</span><button type="button" class="btn btn-fit" id="pr-freeze" hidden disabled>Inspect fixed data</button></div>
+        <svg class="pr-chart" id="pr-convergence" role="img" aria-label="Learning diagnostic over time"></svg>
+        <p id="pr-mode-note" class="pr-caption"></p>
+      </div>
+      <div id="pr-cost-content"><p id="pr-comparison-summary" class="pr-comparison-summary" aria-live="polite">Run to compare all four controllers</p><div class="pr-cost-tools"><input type="hidden" id="pr-cost-metric" value="total" hidden><div id="pr-cost-switch" class="pr-cost-switch" role="group" aria-label="Cost display"><button type="button" id="pr-cost-total" aria-pressed="true" aria-controls="pr-cost">Total cost</button><button type="button" id="pr-cost-gap" aria-pressed="false" aria-controls="pr-cost">Difference</button></div></div><svg class="pr-chart" id="pr-cost" role="img" aria-label="Cumulative cost of active controllers"></svg><table class="pr-cost-table tabular-nums" aria-label="Cumulative controller costs"><thead><tr><th scope="col">Method</th><th scope="col">Cumulative cost</th><th scope="col">vs feedback</th></tr></thead><tbody id="pr-cost-detail"></tbody></table><p id="pr-cost-note" class="pr-caption pr-comparison-note">Dense messages during learning · Adaptation starts at 30 s</p></div>
+      __DEMO_REFERENCE_STUDY__
+    </section>
+  </div>
+  <div class="pr-bottomline">
+    <span id="pr-event" role="status" aria-live="polite">Ready · Space to run</span>
+  </div>
+  <div hidden><span id="pr-fit-title"></span><span id="pr-learning"></span><span id="pr-topology-label"></span><span id="pr-links-detail"></span><span id="pr-matrix-reference"></span><span id="pr-impact-note"></span></div>
+  <div class="pr-tooltip tabular-nums" role="tooltip" id="pr-tooltip"></div>
+  <div role="alert" id="pr-error" hidden></div>
+</div>

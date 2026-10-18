@@ -1,0 +1,25 @@
+{
+  "algorithmId": "opredsls-window-ridge-v1",
+  "upstream": {
+    "repository": "https://github.com/tongxin-li/online-sls-demo",
+    "commit": "db596461f147c57f8e5ad61cbb7542a886a58067",
+    "download_date": "2026-10-18"
+  },
+  "source_files": {
+    "src/online_sls/original_online.py": "2190e115d45760092dd5278e8edb5a5c1425b176709f4fdd5849cd7ffa2c90ea",
+    "src/online_sls/codesign/communication_protocol.py": "e8a644bc7c286cd2489cc2300cf32393027f3a499a75fa1e13d96f1b100e819c",
+    "src/online_sls/codesign/communication_realization.py": "14ed28397205e65036c69b42adbb9c92faf04596e83762cf9cf915ccf52367ff",
+    "src/online_sls/codesign/communication_solver.py": "14d63ed9e5dc49e2771e443983673f468b7725b5e86343bd42571477582fdcd2",
+    "configs/voltage_codesign.json": "d0b442865c2d7356b476216c8556c633508a7019bb738af865f4797fd29c26dd"
+  },
+  "scope": "Port of mean-ridge current-row predictive-response adaptation and raw actual-message-gain support selection. The demo plant, static causal K, bounded actuators, and finite-FIR offline synthesizer are retained; not a replay of vendor dynamic K_e trajectories.",
+  "settings": {
+    "history_window": 60,
+    "prediction_window": 5,
+    "warmup": 30,
+    "regularization": 1.2725674932370515e-05
+  },
+  "online_affine_projection": false,
+  "discovery_statistics": "sum over executed t>=30 and temporal blocks of actual L_ij squared; no time averaging",
+  "sparse_deployment": "retain local inverter forecast and fixed per-network remote budget; re-synthesize X/U under actual L support; freeze deployment"
+}
