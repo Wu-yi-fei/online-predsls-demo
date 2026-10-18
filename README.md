@@ -1,6 +1,6 @@
 # O-PredSLS
 
-*Online System-Level Synthesis for Prediction-Adaptive Networked Control*
+*Paper Title: Online System-Level Synthesis for Prediction-Adaptive Networked Control*
 
 Yifei Wu, [Jing Yu](https://jingyu.io/), [Tongxin Li](https://tongxin.me/)
 
