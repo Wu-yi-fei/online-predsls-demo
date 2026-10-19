@@ -76,8 +76,17 @@ async function main() {
     assert.equal(await page.locator('#pr-experiment').isVisible(),true,'Experiment selection is a primary control');
     assert.equal(await page.locator('#pr-adaptation').getAttribute('open'),null,'Settings start closed');
     assert.equal(await page.locator('#pr-voltage-details').getAttribute('open'),null,'Voltage diagnostics start closed');
-    assert.equal(await page.locator('#pr-link-history-details').getAttribute('open'),null,'Link archive starts closed');
-    assert.equal(await page.locator('#pr-reference-study').getAttribute('open'),null,'Current validation note starts closed');
+    const checkRemovedInterface = async surface => {
+      const ids=['auto-compare','all-links','phase-note','fit-detail','scheduled-power','action-note','link-history-details','cost-note','reference-study'];
+      for(const id of ids){
+        const node=surface.locator('#pr-'+id);
+        assert.equal(await node.count(),1,'The bound '+id+' node remains available to replay and rendering');
+        assert.equal(await node.isVisible(),false,'Removed '+id+' UI stays hidden');
+        assert.equal(await node.evaluate(element=>!!element.parentElement.closest('[hidden]')),true,
+          'A hidden ancestor keeps '+id+' out of layout and the keyboard sequence even when rendering changes its own hidden flag');
+      }
+    };
+    await checkRemovedInterface(page);
     assert.equal(await page.locator('#pr-experiment-progress').isVisible(),true,'Both experiment stages are explained before playback');
     assert.equal(await page.locator('[id^="pr-codesign"]').count(),0,'The duplicate communication scatter and ledger are removed');
     assert.equal(await page.locator('#pr-learning-title').textContent(),'Experiment results');
@@ -438,9 +447,7 @@ async function main() {
         await surface.locator('#pr-matrix .matrix-cell[data-receiver="5"][data-source="7"]').click();
         const inspected=await checkDashboardLayout(surface);
         assert.ok(inspected.boxes[1].height>original.boxes[1].height,'Actual source details expand their own column');
-        await surface.locator('#pr-link-history-details > summary').click();
-        await checkDashboardLayout(surface);
-        await surface.locator('#pr-link-history-details > summary').click();
+        await checkRemovedInterface(surface);
         const eventPreviewWidths=new Set();
         for(const width of [390,768,1440,650,651,viewport.width]){
           await surface.setViewportSize({width,height:1000});
@@ -469,7 +476,7 @@ async function main() {
         // Reload restores the exact trial, not an inspection-only selection.
         await surface.reload({waitUntil:'networkidle'});
         await checkDashboardLayout(surface);
-        assert.equal(await surface.locator('#pr-reference-study').getAttribute('open'),null);
+        await checkRemovedInterface(surface);
       }
       assert.equal(await surface.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),before,'Reflow, disclosures and breakpoint changes preserve exact physical replay and every cost');
     };
@@ -911,17 +918,13 @@ async function main() {
       const preview=await section.screenshot({path:path.join(output,'comparison-budgets-'+width+'.jpg'),type:'jpeg',quality:85});
       console.log('CLOUD_PROGRESS_PREVIEW_'+width+' '+preview.toString('base64'));
     };
-    const inspectReferenceStudy = async surface => {
+    const checkValidationReport = async surface => {
       const panel=surface.locator('#pr-reference-study');
-      assert.equal(await panel.getAttribute('open'),null);
       const before=await surface.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot()));
-      await surface.locator('#pr-reference-study > summary').click();
-      assert.notEqual(await panel.getAttribute('open'),null);
-      assert.equal(await surface.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),before,'Opening validation provenance cannot reset or advance the live experiment');
-      assert.ok(await surface.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Validation note stays within the page');
+      await checkRemovedInterface(surface);
       const measured=await panel.evaluate(element=>({
         text:element.textContent,notes:Array.from(element.querySelectorAll('[title]')).map(node=>node.title).join(' '),
-        links:Array.from(element.querySelectorAll('a')).map(a=>({href:a.getAttribute('href'),width:a.getBoundingClientRect().width})),
+        links:Array.from(element.querySelectorAll('a')).map(a=>a.getAttribute('href')),
         legacyNumbers:element.querySelectorAll('[data-study-method],[data-regime-method],[data-ablation-method],[data-beta]').length
       }));
       assert.equal(measured.legacyNumbers,0,'Old benchmark points must not be attributed to the new controller');
@@ -929,16 +932,11 @@ async function main() {
       assert.match(measured.notes,/not displayed as evidence/);
       assert.match(measured.text,/Plots: accumulated stage cost/);
       assert.match(measured.text,/Validation: terminal cost reported separately/);
-      assert.deepEqual(measured.links.map(link=>link.href),['environment.html','validation-report.json','README.md']);
-      assert.ok(measured.links.every(link=>link.width>0),'Validation and model links remain visible on desktop and phone');
+      assert.deepEqual(measured.links,['environment.html','validation-report.json','README.md']);
       const report=JSON.parse(await fs.readFile(path.join(root,'validation-report.json'),'utf8'));
       assert.equal(report.status,'passed');assert.equal(report.failures.length,0);
       for(const source of ['src/online-predsls.js','src/simulation.js','src/response-controller.js'])assert.match(report.sources[source],/^[a-f0-9]{64}$/);
-      await panel.locator('a[href="validation-report.json"]').focus();
-      assert.equal(await panel.locator('a[href="validation-report.json"]').evaluate(node=>node===document.activeElement),true,'Current evidence is keyboard reachable');
-      await panel.screenshot({path:path.join(output,'validation-provenance-'+surface.viewportSize().width+'.png')});
-      await surface.locator('#pr-reference-study > summary').click();
-      assert.equal(await surface.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),before,'Closing validation provenance leaves the run intact');
+      assert.equal(await surface.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),before,'Reading retained validation evidence leaves the run intact');
     };
 
     const checkCostSwitch = async (surface,metric,reference) => {
@@ -1110,7 +1108,7 @@ async function main() {
     assert.equal(await page.locator('#pr-cost path.data-series').count(),1,'Curve visibility is independent from the four measured method budgets');
     for(const key of ['online','scalar','static'])await page.locator('[data-series="'+key+'"]').click();
     assert.equal(await page.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),designsBefore,'Comparative design inspection cannot alter the run');
-    await inspectReferenceStudy(page);
+    await checkValidationReport(page);
     await inspectLinkEvidence(page);
     assert.ok((await page.locator('.intervention-badge title').allTextContents()).filter(text=>text.includes('Scheduled demand')).every(text=>text.includes('Included in issued forecasts')));
     await page.screenshot({path:path.join(output,'default-scenario-complete.png'),fullPage:true});
@@ -1251,28 +1249,22 @@ async function main() {
 
     await mark('comparison handoff and inspection');
 
-    // Archived discovery connectivity is not a change to the deployed controller.
+    // Hiding the archive preserves live response inspection and recorded topology data.
     const liveBefore=await page.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot()));
-    assert.ok(Number(await page.locator('#pr-topology-history').getAttribute('max'))>0,'Discovery produced inspectable link changes');
-    assert.equal(await page.locator('#pr-topology-events').isVisible(),false,'Recent changes stay inside the closed link history');
-    await page.locator('#pr-link-history-details > summary').click();
-    assert.equal(await page.locator('#pr-topology-events button').first().isVisible(),true,'Recorded change cards remain available when history is opened');
-    await page.locator('#pr-topology-history').press('Home');
+    assert.ok(Number(await page.locator('#pr-topology-history').getAttribute('max'))>0,'Discovery continues recording link changes');
+    await checkRemovedInterface(page);
+    assert.equal(await page.locator('#pr-topology-events').isVisible(),false,'Recorded changes remain outside the visible interface');
+    assert.equal(await page.evaluate(()=>document.querySelector('#power-response-demo').powerDemo.getState().historyIndex),null);
     await checkProtocol(page);
-    assert.equal(await page.locator('#pr-matrix .matrix-columns text[data-noisy="true"]').count(),0,'Current quality is not painted onto historical links');
-    assert.equal(await page.locator('#pr-source-fault').isDisabled(),true);
-    assert.equal(await page.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),liveBefore);
-    await page.screenshot({path:path.join(output,'protocol-history.png'),fullPage:true});
-    await captureLinkOwner(page,'1440-history');
     await selectSetting(page,'matrix-view','change');
     await checkProtocol(page);await checkForecastObservation(page);await checkSourceHistory(page);await checkCommandInspection(page);
-    assert.equal(await page.locator('#pr-source-fault').isDisabled(),false,'Leaving history through matrix view restores live source actions immediately');
-    assert.ok(await page.locator('#pr-matrix .matrix-columns text[data-noisy="true"]').count()>0,'Live source quality returns with current links');
+    assert.equal(await page.locator('#pr-source-fault').isDisabled(),false,'Live source actions remain available in the weight view');
+    assert.ok(await page.locator('#pr-matrix .matrix-columns text[data-noisy="true"]').count()>0,'Source quality remains attached to current links');
     assert.equal(await page.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),liveBefore);
     await selectSetting(page,'matrix-view','links');
-    await page.locator('#pr-link-history-details > summary').click();
+    assert.equal(await page.evaluate(()=>JSON.stringify(document.querySelector('#power-response-demo').powerDemo.getSnapshot())),liveBefore);
 
-    await mark('archived protocol inspection');
+    await mark('live response inspection');
 
     // Real buttons remain stable across live renders, including a press held over samples.
     assert.equal(await page.locator('#pr-speed').inputValue(),'32');
@@ -1666,7 +1658,7 @@ async function main() {
     await stepSetting(phone);
     assert.ok(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Default scenario fits the narrow mobile page');
     await phone.screenshot({path:path.join(output,'default-scenario-mobile.png'),fullPage:true});
-    await checkExperimentProgress(phone);await inspectReferenceStudy(phone);
+    await checkExperimentProgress(phone);await checkValidationReport(phone);
     await useReference(phone);
     await selectSetting(phone,'speed','32');
     await selectSetting(phone,'view','cost');
@@ -1824,7 +1816,7 @@ async function main() {
     await phone.screenshot({path:path.join(output,'environment.png'),fullPage:true});
     await mark('mobile inspection and responsive evidence');
     assert.deepEqual(errors, [], 'No browser runtime errors');
-    await fs.writeFile(path.join(output, 'summary.json'), JSON.stringify({ passed: true, browser: browser.version(), timings, touchEvents, checks: ['actual cost versus remote prediction budget for all four designs', 'design tradeoff independent of curve visibility and cost display', 'same-budget sparse marker overlap remains visible', 'current validation source provenance replaces legacy benchmark values', 'opening validation provenance preserves paused live state on desktop and mobile', 'primary controls and four panels stay visible while advanced settings start closed', 'restart returns to a fresh learning trial with selected options', 'pending source settings at every finite segment preserve exact replay and first new issuance', 'final applied power remains visible after request expiry with exact replay', 'paused completed source settings preserve Continue and exact replay', 'restored mixed trial preserves old costs until explicit new scenario', 'all noisy sources notice and fresh reliable inverter map', 'shipped demand and solar default completes and pauses after 180 comparison samples', 'actual scheduled power visual metadata and forecasted event labels', 'completed default restores and explicitly continues', 'extended forecast stress clears previous power attacks and costs', 'all four measured forecast stress curves and actual prediction commands', 'extended stress saved trial replay and reference return', 'forecast stress desktop and mobile layout', 'actual forecast setting timestamps and typed mixed event markers', 'keyboard matrix inspection and native command table scrolling', 'visible temporal source gain without hover', 'playback', 'repeated forecast bus clicks', 'three simultaneous continuous power attacks and independent stop', 'all attack sources survive automatic handoff', 'actual protocol receipt and archived discovery view', 'matrix mode exit restores live source controls without advancing plant', 'four controller curves', 'nominal voltage diagnostics for all four controllers', 'thirty real cost button clicks at 32x without pausing', 'stable cost button and focus across held pointer samples', 'native Enter and Space cost activation', 'zero baseline and all four curves in both quantities', 'saved gap state restoration', 'mobile cost button taps and target sizes', 'repeated mobile forecast taps', 'explicit inspected source actions on desktop and mobile', 'raw revealed source forecast errors and issue times', 'rolling sixty-pair error and pending issuance timing', 'independent paused browser source error stream', 'actual receiver command decomposition and limiter on desktop and mobile', 'three simultaneous mobile power attacks and independent stop', 'mobile touch and layout'], errors }, null, 2));
+    await fs.writeFile(path.join(output, 'summary.json'), JSON.stringify({ passed: true, browser: browser.version(), timings, touchEvents, checks: ['actual cost versus remote prediction budget for all four designs', 'design tradeoff independent of curve visibility and cost display', 'same-budget sparse marker overlap remains visible', 'current validation source provenance replaces legacy benchmark values', 'reading validation provenance preserves paused live state on desktop and mobile', 'primary controls and four panels stay visible while advanced settings start closed', 'restart returns to a fresh learning trial with selected options', 'pending source settings at every finite segment preserve exact replay and first new issuance', 'final applied power remains visible after request expiry with exact replay', 'paused completed source settings preserve Continue and exact replay', 'restored mixed trial preserves old costs until explicit new scenario', 'all noisy sources notice and fresh reliable inverter map', 'shipped demand and solar default completes and pauses after 180 comparison samples', 'actual scheduled power visual metadata and forecasted event labels', 'completed default restores and explicitly continues', 'extended forecast stress clears previous power attacks and costs', 'all four measured forecast stress curves and actual prediction commands', 'extended stress saved trial replay and reference return', 'forecast stress desktop and mobile layout', 'actual forecast setting timestamps and typed mixed event markers', 'keyboard matrix inspection and native command table scrolling', 'visible temporal source gain without hover', 'playback', 'repeated forecast bus clicks', 'three simultaneous continuous power attacks and independent stop', 'all attack sources survive automatic handoff', 'actual protocol receipt and hidden topology archive', 'live matrix modes preserve source controls without advancing plant', 'four controller curves', 'nominal voltage diagnostics for all four controllers', 'thirty real cost button clicks at 32x without pausing', 'stable cost button and focus across held pointer samples', 'native Enter and Space cost activation', 'zero baseline and all four curves in both quantities', 'saved gap state restoration', 'mobile cost button taps and target sizes', 'repeated mobile forecast taps', 'explicit inspected source actions on desktop and mobile', 'raw revealed source forecast errors and issue times', 'rolling sixty-pair error and pending issuance timing', 'independent paused browser source error stream', 'actual receiver command decomposition and limiter on desktop and mobile', 'three simultaneous mobile power attacks and independent stop', 'mobile touch and layout'], errors }, null, 2));
     console.log('Browser smoke passed');
   } finally {
     if (browser) await browser.close();

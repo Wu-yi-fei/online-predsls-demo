@@ -761,10 +761,10 @@ summary span { color:var(--muted-foreground); transition:transform .15s; }
       <label id="pr-preset-control" for="pr-preset">Error model <select id="pr-preset" aria-label="Forecast preset" title="Changing forecasts starts a new discovery trial"><option value="reliable">Low noise</option><option value="uniform">Uniform bias + noise</option><option value="mixed" selected>Mixed bias + noise</option></select></label>
       <button type="button" class="btn btn-compare" id="pr-compare" title="Advance 180 samples across discovery and comparison">Advance 180</button>
     </div>
-    <div class="pr-settings"><label class="form-check"><input type="checkbox" id="pr-auto-compare" checked>Start comparison automatically</label><label>Bus <select id="pr-bus" aria-label="Selected bus"></select></label><button type="button" class="btn" id="pr-fault">Repair forecast</button><label class="form-check"><input type="checkbox" id="pr-all-links" checked>All prediction links</label></div>
+    <div class="pr-settings"><label>Bus <select id="pr-bus" aria-label="Selected bus"></select></label><button type="button" class="btn" id="pr-fault">Repair forecast</button></div>
     <div class="pr-settings-group pr-session-settings"><button type="button" id="pr-deploy" class="btn btn-deploy" disabled title="Start four controllers on the same fresh disturbance sequence">Rebuild prediction links</button><button type="button" class="btn btn-quiet" id="pr-new-scenario" hidden>Restore default scenario</button></div>
-    <p id="pr-phase-note" class="pr-overlap-note">Physical attacks test disturbance recovery · Forecast settings test prediction adaptation</p>
-    <p class="pr-caption" id="pr-fit-detail"></p>
+
+
   </details>
   <div class="pr-scenario-heading">
     <div><strong id="pr-scenario-name">Forecasted demand</strong><p id="pr-scenario-description" class="pr-caption">Forecast settings · β 4 · 8 quiet / 15 noisy</p></div>
@@ -798,8 +798,8 @@ summary span { color:var(--muted-foreground); transition:transform .15s; }
   <div id="pr-controller-key" class="pr-legend pr-controller-key" role="group" aria-label="Controller curves"><button type="button" data-series="online" aria-pressed="true"><span class="pr-swatch online"></span>Online SLS</button><button type="button" data-series="scalar" aria-pressed="true"><span class="pr-swatch scalar"></span>Scalar adaptation</button><button type="button" data-series="static" aria-pressed="true"><span class="pr-swatch static"></span>Fixed prediction</button><button type="button" data-series="causal" aria-pressed="true"><span class="pr-swatch causal"></span>Feedback only</button></div>
   <div class="pr-dashboard">
     <section class="pr-panel pr-network-panel" aria-labelledby="pr-network-title">
-      <div class="pr-subhead"><h2 id="pr-network-title">Power network</h2><span id="pr-action-note" class="pr-caption" aria-live="polite">Click a bus to start · Click again to stop</span></div>
-      <p id="pr-scheduled-power" class="pr-caption pr-scheduled-power" hidden></p>
+      <div class="pr-subhead"><h2 id="pr-network-title">Power network</h2></div>
+
       <p id="pr-network-scroll-hint" class="pr-scroll-hint" hidden>Scroll to explore all buses →</p><div class="pr-network-scroll" role="region"><svg class="pr-chart" id="pr-network" role="group" aria-label="24 bus radial power feeder. Click a load, solar, or battery bus to start a continuous disturbance. Click again to stop."></svg></div>
       <p id="pr-network-inspection" class="pr-network-inspection" hidden><span id="pr-network-inspection-source" class="pr-inspection-source"></span><span id="pr-network-inspection-join" aria-hidden="true"></span><span id="pr-network-inspection-receiver" class="pr-inspection-receiver"></span><span id="pr-network-inspection-status"></span></p>
       <div class="pr-panel-foot"><span id="pr-bus-detail" class="tabular-nums"></span><span class="pr-live-stage">Cost <strong id="pr-live-cost" class="tabular-nums">0.0000</strong></span></div>
@@ -842,7 +842,7 @@ summary span { color:var(--muted-foreground); transition:transform .15s; }
           <p id="pr-command-gain-note" class="pr-caption" title="Source message-gain norm across the issued preview, in pu command per pu forcing.">Request = Source + Other + Feedback · Command ∈ [−70, 70] kvar</p>
         </details>
       </div>
-      <div class="pr-panel-foot pr-matrix-detail"><span id="pr-matrix-detail">Rows receive from columns</span><span id="pr-matrix-changes" class="tabular-nums">0 added · 0 removed</span></div><details id="pr-link-history-details" class="pr-panel-details"><summary>Link history</summary><div class="pr-topology-status"><strong id="pr-topology-status">Connectivity unchanged</strong><span id="pr-topology-gain">Weights changed 0%</span></div><div id="pr-topology-events" class="pr-topology-events" aria-label="Recent topology changes" hidden></div><div class="pr-topology-history"><label for="pr-topology-history" id="pr-history-count">0 link updates</label><input id="pr-topology-history" type="range" min="0" max="0" step="1" value="0" aria-label="Topology history" disabled><button type="button" id="pr-history-live" aria-pressed="true">Latest</button></div><p id="pr-topology-note" class="pr-caption" aria-live="polite"></p></details>
+      <div class="pr-panel-foot pr-matrix-detail"><span id="pr-matrix-detail">Rows receive from columns</span><span id="pr-matrix-changes" class="tabular-nums">0 added · 0 removed</span></div>
     </section>
     <section class="pr-panel pr-stage-panel" aria-labelledby="pr-stage-title">
       <div class="pr-subhead"><h2 id="pr-stage-title">Voltage and cost</h2><strong id="pr-state-value" class="pr-state-value tabular-nums">1.000 pu</strong></div>
@@ -870,19 +870,29 @@ summary span { color:var(--muted-foreground); transition:transform .15s; }
         <svg class="pr-chart" id="pr-convergence" role="img" aria-label="Learning diagnostic over time"></svg>
         <p id="pr-mode-note" class="pr-caption"></p>
       </div>
-      <div id="pr-cost-content"><p id="pr-comparison-summary" class="pr-comparison-summary" aria-live="polite">Run to compare all four controllers</p><div class="pr-cost-tools"><input type="hidden" id="pr-cost-metric" value="total" hidden><div id="pr-cost-switch" class="pr-cost-switch" role="group" aria-label="Cost display"><button type="button" id="pr-cost-total" aria-pressed="true" aria-controls="pr-cost">Total cost</button><button type="button" id="pr-cost-gap" aria-pressed="false" aria-controls="pr-cost">Difference</button></div></div><svg class="pr-chart" id="pr-cost" role="img" aria-label="Cumulative cost of active controllers"></svg><table class="pr-cost-table tabular-nums" aria-label="Cumulative controller costs"><thead><tr><th scope="col">Method</th><th scope="col">Cumulative cost</th><th scope="col">vs feedback</th></tr></thead><tbody id="pr-cost-detail"></tbody></table><p id="pr-cost-note" class="pr-caption pr-comparison-note">Dense messages during learning · Adaptation starts at 30 s</p></div>
-      <details id="pr-reference-study" class="pr-panel-details pr-reference-study">
-  <summary>Model and validation</summary>
-  <p class="pr-caption"><a href="environment.html">Model and algorithm</a> · <a href="validation-report.json">Validation report</a> · <a href="README.md">README</a></p>
-  <p class="pr-caption" title="Upstream benchmark tables describe a different implementation and are not displayed as evidence for this edition. The validation report records current source fingerprints and trial results.">Plots: accumulated stage cost · Validation: terminal cost reported separately</p>
-</details>
-
+      <div id="pr-cost-content"><p id="pr-comparison-summary" class="pr-comparison-summary" aria-live="polite">Run to compare all four controllers</p><div class="pr-cost-tools"><input type="hidden" id="pr-cost-metric" value="total" hidden><div id="pr-cost-switch" class="pr-cost-switch" role="group" aria-label="Cost display"><button type="button" id="pr-cost-total" aria-pressed="true" aria-controls="pr-cost">Total cost</button><button type="button" id="pr-cost-gap" aria-pressed="false" aria-controls="pr-cost">Difference</button></div></div><svg class="pr-chart" id="pr-cost" role="img" aria-label="Cumulative cost of active controllers"></svg><table class="pr-cost-table tabular-nums" aria-label="Cumulative controller costs"><thead><tr><th scope="col">Method</th><th scope="col">Cumulative cost</th><th scope="col">vs feedback</th></tr></thead><tbody id="pr-cost-detail"></tbody></table></div>
     </section>
   </div>
   <div class="pr-bottomline">
     <span id="pr-event" role="status" aria-live="polite">Ready · Space to run</span>
   </div>
-  <div hidden><span id="pr-fit-title"></span><span id="pr-learning"></span><span id="pr-topology-label"></span><span id="pr-links-detail"></span><span id="pr-matrix-reference"></span><span id="pr-impact-note"></span></div>
+  <div id="pr-internal-ui" hidden inert>
+    <span id="pr-fit-title"></span><span id="pr-learning"></span><span id="pr-topology-label"></span><span id="pr-links-detail"></span><span id="pr-matrix-reference"></span><span id="pr-impact-note"></span>
+    <input type="checkbox" id="pr-auto-compare" checked>
+    <input type="checkbox" id="pr-all-links" checked>
+    <p id="pr-phase-note" class="pr-overlap-note">Physical attacks test disturbance recovery · Forecast settings test prediction adaptation</p>
+    <p class="pr-caption" id="pr-fit-detail"></p>
+    <span id="pr-action-note" class="pr-caption" aria-live="polite">Click a bus to start · Click again to stop</span>
+    <p id="pr-scheduled-power" class="pr-caption pr-scheduled-power" hidden></p>
+    <p id="pr-cost-note" class="pr-caption pr-comparison-note">Dense messages during learning · Adaptation starts at 30 s</p>
+    <details id="pr-link-history-details" class="pr-panel-details"><summary>Link history</summary><div class="pr-topology-status"><strong id="pr-topology-status">Connectivity unchanged</strong><span id="pr-topology-gain">Weights changed 0%</span></div><div id="pr-topology-events" class="pr-topology-events" aria-label="Recent topology changes" hidden></div><div class="pr-topology-history"><label for="pr-topology-history" id="pr-history-count">0 link updates</label><input id="pr-topology-history" type="range" min="0" max="0" step="1" value="0" aria-label="Topology history" disabled><button type="button" id="pr-history-live" aria-pressed="true">Latest</button></div><p id="pr-topology-note" class="pr-caption" aria-live="polite"></p></details>
+    <details id="pr-reference-study" class="pr-panel-details pr-reference-study">
+  <summary>Model and validation</summary>
+  <p class="pr-caption"><a href="environment.html">Model and algorithm</a> · <a href="validation-report.json">Validation report</a> · <a href="README.md">README</a></p>
+  <p class="pr-caption" title="Upstream benchmark tables describe a different implementation and are not displayed as evidence for this edition. The validation report records current source fingerprints and trial results.">Plots: accumulated stage cost · Validation: terminal cost reported separately</p>
+</details>
+
+  </div>
   <div class="pr-tooltip tabular-nums" role="tooltip" id="pr-tooltip"></div>
   <div role="alert" id="pr-error" hidden></div>
 </main>
