@@ -6,7 +6,7 @@ Authors: Yifei Wu, [Jing Yu](https://jingyu.io/), [Tongxin Li](https://tongxin.m
 
 O-PredSLS learns predictive closed-loop responses online to adapt to heterogeneous prediction errors. The interactive demo illustrates voltage regulation and communication selection from learned responses.
 
-**Paper** (forthcoming) | **PDF** (forthcoming) | [Demo](https://wu-yi-fei.github.io/online-predsls-demo/demo.html)
+**Paper** (forthcoming) | **Supplementary** (forthcoming) | [Demo](https://wu-yi-fei.github.io/online-predsls-demo/demo.html)
 
 [Project homepage](https://wu-yi-fei.github.io/online-predsls-demo/)
 
